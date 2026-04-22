@@ -1,0 +1,61 @@
+<programa> ::= inicio <instrucciones> fin
+
+<instrucciones> ::= <instruccion>
+                  | <instrucciones> <instruccion>
+
+<instruccion> ::= <declaracion>
+                | <asignacion>
+                | <imprimir>
+                | <entrada>
+                | <condicional>
+                | <mientras>
+                | <retornar>
+
+<declaracion> ::= geo IDENTIFICADOR ;
+                | geo IDENTIFICADOR = <expresion> ;
+                | texto IDENTIFICADOR ;
+                | texto IDENTIFICADOR = <expresion> ;
+                | esencia IDENTIFICADOR ;
+                | esencia IDENTIFICADOR = <expresion> ;
+
+<asignacion> ::= IDENTIFICADOR = <expresion> ;
+
+<imprimir> ::= invocar ( <expresion> ) ;
+
+<entrada> ::= escuchar ( IDENTIFICADOR ) ;
+
+<condicional> ::= si ( <expresion> ) entonces { <instrucciones> }
+                | si ( <expresion> ) entonces { <instrucciones> }
+                  sombra { <instrucciones> }
+
+<mientras> ::= mientras ( <expresion> ) { <instrucciones> }
+
+<retornar> ::= retornar <expresion> ;
+             | retornar ;
+
+<expresion> ::= <expresion> + <expresion>
+              | <expresion> - <expresion>
+              | <expresion> * <expresion>
+              | <expresion> / <expresion>
+              | <expresion> == <expresion>
+              | <expresion> != <expresion>
+              | <expresion> < <expresion>
+              | <expresion> > <expresion>
+              | <expresion> <= <expresion>
+              | <expresion> >= <expresion>
+              | <expresion> && <expresion>
+              | <expresion> || <expresion>
+              | ! <expresion>
+              | ( <expresion> )
+              | NUMERO
+              | CADENA
+              | luz
+              | IDENTIFICADOR
+
+<IDENTIFICADOR> ::= letra | letra <resto>
+<resto>         ::= letra | digito | _ | letra <resto> | digito <resto> | _ <resto>
+<letra>         ::= a | b | c | ... | z | A | B | C | ... | Z
+<digito>        ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<NUMERO>        ::= <digito> | <digito> <NUMERO>
+<CADENA>        ::= " <caracteres> "
+<caracteres>    ::= <caracter> | <caracter> <caracteres>

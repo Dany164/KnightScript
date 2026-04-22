@@ -1,0 +1,163 @@
+/* ── Panel de salida ─────────────────────────────────────────── */
+.output-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Tab bar ─────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: all var(--ease);
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  background: rgba(91, 141, 217, 0.05);
+}
+
+.tab-active {
+  color: var(--accent-glow) !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+.tab-icon { font-size: 0.85rem; }
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--error);
+  color: white;
+  border-radius: 9px;
+  font-size: 0.65rem;
+  font-family: var(--font-code);
+}
+
+/* ── Contenido de tab ────────────────────────────────────────── */
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── Estado vacío ────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 0.75rem;
+  color: var(--text-dim);
+  font-size: 1rem;
+  padding: 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+.empty-state.ok { color: var(--success); }
+
+.empty-icon {
+  font-size: 2.5rem;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+.ok-icon { opacity: 0.6; font-size: 2rem; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ── AST (pre-formatted) ─────────────────────────────────────── */
+.ast-content {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem 1.2rem;
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--accent-glow);
+  white-space: pre;
+  background: var(--bg-panel);
+}
+
+/* ── Tablas ──────────────────────────────────────────────────── */
+.table-wrapper {
+  flex: 1;
+  overflow: auto;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.result-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-surface);
+}
+
+.result-table th {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-bright);
+}
+
+.result-table td {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text);
+}
+
+.result-table tbody tr:hover {
+  background: rgba(91, 141, 217, 0.05);
+}
+
+.error-row td { color: var(--error); }
+.error-row:hover { background: var(--error-glow) !important; }
+
+/* Columnas especiales de la tabla de símbolos */
+.sym-id   { color: var(--accent-glow); font-family: var(--font-code); font-size: 0.82rem; }
+.sym-type { color: var(--gold); font-family: var(--font-code); font-size: 0.82rem; }
+.sym-val  { color: var(--text-dim); font-family: var(--font-code); font-size: 0.82rem; }

@@ -1,0 +1,58 @@
+/* ── Google Fonts already loaded via index.html ─────────────────────────── */
+
+/* ── Design Tokens — Hollow Knight Palette ──────────────────────────────── */
+:root {
+  --bg:            #0f0e17;
+  --bg-surface:    #191826;
+  --bg-panel:      #1d1c2c;
+  --bg-elevated:   #252438;
+  --border:        #2c2b40;
+  --border-bright: #484670;
+
+  --accent:        #5b8dd9;
+  --accent-glow:   #7aaef0;
+  --accent-dim:    #3a5f9a;
+  --gold:          #c9a84c;
+  --gold-dim:      #6e5a28;
+
+  --text:          #c8d4e0;
+  --text-dim:      #7a8898;
+  --text-bright:   #e8f2fc;
+
+  --success:       #5aab6e;
+  --success-glow:  rgba(90, 171, 110, 0.25);
+  --error:         #c8453a;
+  --error-glow:    rgba(200, 69, 58, 0.25);
+
+  --font-heading:  'Cinzel', serif;
+  --font-body:     'Crimson Pro', serif;
+  --font-code:     'Fira Code', 'Consolas', monospace;
+
+  --radius:        6px;
+  --radius-lg:     10px;
+  --ease:          0.2s ease;
+
+  --shadow:        0 4px 24px rgba(0, 0, 0, 0.7);
+  --shadow-glow:   0 0 24px rgba(91, 141, 217, 0.2);
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }

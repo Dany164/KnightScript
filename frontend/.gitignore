@@ -1,0 +1,20 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (NUNCA subir a GitHub)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Build de producción
+dist/
+
+# Caché de Vite
+.vite/
+
+# Vercel
+.vercel/
+
+# Mac
+.DS_Store

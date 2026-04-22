@@ -1,0 +1,170 @@
+import java_cup.runtime.*;
+import compilador.ast.*;
+import java.util.*;
+
+/* CODIGO DEL PARSER - manejo de errores */
+parser code {:
+:};
+
+/* TERMINALES - palabras reservadas */
+terminal INICIO, FIN;
+terminal GEO, TEXTO, ESENCIA;
+terminal SI, SOMBRA, ENTONCES;
+terminal MIENTRAS, RECORRER;
+terminal INVOCAR, ESCUCHAR;
+terminal LUZ, VACIO, RETORNAR;
+
+/* TERMINALES - operadores aritmeticos */
+terminal SUMA, RESTA, MULT, DIV;
+
+/* TERMINALES - operadores comparacion */
+terminal IGUAL, DIFERENTE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
+
+/* TERMINALES - operadores logicos */
+terminal AND, OR, NOT;
+
+/* TERMINALES - asignacion y simbolos */
+terminal ASIGNACION;
+terminal PUNTO_COMA, COMA;
+terminal PARENTESIS_ABRE, PARENTESIS_CIERRA;
+terminal LLAVE_ABRE, LLAVE_CIERRA;
+
+/* TERMINALES - valores */
+terminal String IDENTIFICADOR;
+terminal String NUMERO;
+terminal String CADENA;
+
+/* NO TERMINALES */
+non terminal Programa          programa;
+non terminal List              instrucciones;
+non terminal ASTNode           instruccion;
+non terminal ASTNode           declaracion;
+non terminal ASTNode           asignacion;
+non terminal ASTNode           imprimir;
+non terminal ASTNode           entrada;
+non terminal ASTNode           si;
+non terminal ASTNode           mientras;
+non terminal ASTNode           retornar;
+non terminal Expresion         expresion;
+non terminal List              argumentos;
+
+/* PRECEDENCIA */
+precedence left OR;
+precedence left AND;
+precedence left NOT;
+precedence left IGUAL, DIFERENTE;
+precedence left MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
+precedence left SUMA, RESTA;
+precedence left MULT, DIV;
+
+/* INICIO */
+start with programa;
+
+/* GRAMATICA */
+
+programa ::= INICIO instrucciones:i FIN
+    {: RESULT = new Programa(i); :};
+
+instrucciones ::= instrucciones:l instruccion:i
+    {:
+        l.add(i);
+        RESULT = l;
+    :}
+    | instruccion:i
+    {:
+        List lista = new ArrayList();
+        lista.add(i);
+        RESULT = lista;
+    :};
+
+instruccion ::= declaracion:d    {: RESULT = d; :}
+    | asignacion:a               {: RESULT = a; :}
+    | imprimir:p                 {: RESULT = p; :}
+    | entrada:e                  {: RESULT = e; :}
+    | si:s                       {: RESULT = s; :}
+    | mientras:m                 {: RESULT = m; :}
+    | retornar:r                 {: RESULT = r; :};
+
+/* DECLARACIONES */
+declaracion ::= GEO IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("geo", id); :}
+    | GEO IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("geo", id, e); :}
+    | TEXTO IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("texto", id); :}
+    | TEXTO IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("texto", id, e); :}
+    | ESENCIA IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("esencia", id); :}
+    | ESENCIA IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("esencia", id, e); :};
+
+/* ASIGNACION */
+asignacion ::= IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new Asignacion(id, e); :};
+
+/* PRINT */
+imprimir ::= INVOCAR PARENTESIS_ABRE expresion:e PARENTESIS_CIERRA PUNTO_COMA
+    {: RESULT = new Print(e); :};
+
+/* INPUT */
+entrada ::= ESCUCHAR PARENTESIS_ABRE IDENTIFICADOR:id PARENTESIS_CIERRA PUNTO_COMA
+    {: RESULT = new Escuchar(id); :};
+
+/* CONDICIONAL */
+si ::= SI PARENTESIS_ABRE expresion:cond PARENTESIS_CIERRA ENTONCES
+       LLAVE_ABRE instrucciones:i LLAVE_CIERRA
+    {: RESULT = new Si(cond, i, null); :}
+    | SI PARENTESIS_ABRE expresion:cond PARENTESIS_CIERRA ENTONCES
+      LLAVE_ABRE instrucciones:i LLAVE_CIERRA
+      SOMBRA LLAVE_ABRE instrucciones:s LLAVE_CIERRA
+    {: RESULT = new Si(cond, i, s); :};
+
+/* MIENTRAS */
+mientras ::= MIENTRAS PARENTESIS_ABRE expresion:cond PARENTESIS_CIERRA
+             LLAVE_ABRE instrucciones:i LLAVE_CIERRA
+    {: RESULT = new Mientras(cond, i); :};
+
+/* RETORNAR */
+retornar ::= RETORNAR expresion:e PUNTO_COMA
+    {: RESULT = new Retornar(e); :}
+    | RETORNAR PUNTO_COMA
+    {: RESULT = new Retornar(null); :};
+
+/* EXPRESIONES */
+expresion ::= expresion:e1 SUMA expresion:e2
+    {: RESULT = new Binaria(e1, "+", e2); :}
+    | expresion:e1 RESTA expresion:e2
+    {: RESULT = new Binaria(e1, "-", e2); :}
+    | expresion:e1 MULT expresion:e2
+    {: RESULT = new Binaria(e1, "*", e2); :}
+    | expresion:e1 DIV expresion:e2
+    {: RESULT = new Binaria(e1, "/", e2); :}
+    | expresion:e1 IGUAL expresion:e2
+    {: RESULT = new Binaria(e1, "==", e2); :}
+    | expresion:e1 DIFERENTE expresion:e2
+    {: RESULT = new Binaria(e1, "!=", e2); :}
+    | expresion:e1 MENOR expresion:e2
+    {: RESULT = new Binaria(e1, "<", e2); :}
+    | expresion:e1 MAYOR expresion:e2
+    {: RESULT = new Binaria(e1, ">", e2); :}
+    | expresion:e1 MENOR_IGUAL expresion:e2
+    {: RESULT = new Binaria(e1, "<=", e2); :}
+    | expresion:e1 MAYOR_IGUAL expresion:e2
+    {: RESULT = new Binaria(e1, ">=", e2); :}
+    | expresion:e1 AND expresion:e2
+    {: RESULT = new Binaria(e1, "&&", e2); :}
+    | expresion:e1 OR expresion:e2
+    {: RESULT = new Binaria(e1, "||", e2); :}
+    | NOT expresion:e
+    {: RESULT = new Unaria("!", e); :}
+    | PARENTESIS_ABRE expresion:e PARENTESIS_CIERRA
+    {: RESULT = e; :}
+    | NUMERO:n
+    {: RESULT = new Literal(n); :}
+    | CADENA:c
+    {: RESULT = new Literal(c); :}
+    | LUZ
+    {: RESULT = new Literal("true"); :}
+    | IDENTIFICADOR:id
+    {: RESULT = new Identificador(id); :};

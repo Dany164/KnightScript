@@ -1,0 +1,53 @@
+### IntelliJ IDEA ###
+.idea/
+out/
+*.iml
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### KnightScript — Archivos sensibles y temporales ###
+# NUNCA subir variables de entorno reales
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Archivos temporales del compilador
+temp_knight_script.txt
+knight_*.txt
+
+# Logs
+*.log
+
+# Virtual environments
+.venv/
+
+### Frontend ###
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/dist/
+frontend/.vercel/
