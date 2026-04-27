@@ -4,22 +4,29 @@ import CodeEditor from './components/CodeEditor';
 import OutputPanel from './components/OutputPanel';
 import './App.css';
 
-const EXAMPLE_CODE = `// Ejemplo de KnightScript
-entero x = 10;
-entero y = 20;
-entero suma = x + y;
-imprimir(suma);
-
-si (x < y) {
-  imprimir(x);
-} sombra {
-  imprimir(y);
-}
+const EXAMPLE_CODE = `inicio 
+    geo x = 5; 
+    geo y = 3; 
+    texto mensaje = "Resultado:"; 
+    esencia correcto; 
+    correcto = luz; 
+    si (correcto == luz) entonces { 
+        geo suma; 
+        suma = x + y; 
+        invocar(mensaje); 
+        invocar(suma); 
+    } 
+    mientras (x > 0) { 
+        x = x - 1; 
+        invocar(x); 
+    } 
+    retornar x; 
+fin
 `;
 
 function App() {
-  const [code, setCode]       = useState(EXAMPLE_CODE);
-  const [result, setResult]   = useState(null);
+  const [code, setCode] = useState(EXAMPLE_CODE);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [netError, setNetError] = useState(null);
 
@@ -104,7 +111,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <span>KnightScript © 2025</span>
+        <span>KnightScript © 2026</span>
         <span className="footer-sep">✦</span>
         <span>Lenguaje de programación inspirado en Hollow Knight</span>
       </footer>
