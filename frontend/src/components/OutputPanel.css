@@ -112,6 +112,19 @@
   background: var(--bg-panel);
 }
 
+/* ── Salida de Consola ───────────────────────────────────────── */
+.console-content {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem 1.2rem;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+  background: var(--bg-panel);
+}
+
 /* ── Tablas ──────────────────────────────────────────────────── */
 .table-wrapper {
   flex: 1;

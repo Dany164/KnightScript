@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './OutputPanel.css';
 
 const TABS = [
+  { id: 'salida',      label: 'Salida / Consola',   icon: '💻' },
   { id: 'ast',         label: 'Árbol Sintáctico',   icon: '🌿' },
   { id: 'lexicos',     label: 'Errores Léxicos',    icon: '⚠' },
   { id: 'sintacticos', label: 'Errores Sintácticos', icon: '✗' },
@@ -9,7 +10,7 @@ const TABS = [
 ];
 
 export default function OutputPanel({ result }) {
-  const [activeTab, setActiveTab] = useState('ast');
+  const [activeTab, setActiveTab] = useState('salida');
 
   const lexCount = result?.erroresLexicos?.length ?? 0;
   const synCount = result?.erroresSintacticos?.length ?? 0;
@@ -48,6 +49,7 @@ export default function OutputPanel({ result }) {
           </div>
         ) : (
           <>
+            {activeTab === 'salida'      && <ConsoleView salida={result.salida} />}
             {activeTab === 'ast'         && <ASTView ast={result.ast} />}
             {activeTab === 'lexicos'     && <ErrorTable errors={result.erroresLexicos} type="Léxico" />}
             {activeTab === 'sintacticos' && <ErrorTable errors={result.erroresSintacticos} type="Sintáctico" />}
@@ -56,6 +58,19 @@ export default function OutputPanel({ result }) {
         )}
       </div>
     </div>
+  );
+}
+
+/* ── Vista de Consola ────────────────────────────────────────── */
+function ConsoleView({ salida }) {
+  if (salida === undefined || salida === null) {
+    return <div className="empty-state"><p>El código no produjo ninguna salida.</p></div>;
+  }
+  if (salida.trim() === '') {
+    return <div className="empty-state ok"><p>Ejecución terminada correctamente sin salidas.</p></div>;
+  }
+  return (
+    <pre className="console-content">{salida}</pre>
   );
 }
 

@@ -90,6 +90,7 @@ public class KnightScriptServer {
             StringBuilder sb = new StringBuilder();
             sb.append("{");
             sb.append("\"success\":").append(!engine.tieneErrores()).append(",");
+            sb.append("\"salida\":\"").append(escapeJson(engine.getSalida())).append("\",");
             sb.append("\"ast\":\"").append(escapeJson(engine.getAST())).append("\",");
 
             // Errores léxicos

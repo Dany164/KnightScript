@@ -21,12 +21,14 @@ public class CompilerEngine {
     private List<ErrorSintactico> erroresSintacticos;
     private StringBuilder astBuffer;
     private List<SimboloEntry> simbolos;
+    private String salidaEjecucion;
 
     public CompilerEngine() {
         this.erroresLexicos = new ArrayList<>();
         this.erroresSintacticos = new ArrayList<>();
         this.astBuffer = new StringBuilder();
         this.simbolos = new ArrayList<>();
+        this.salidaEjecucion = "";
     }
 
     /**
@@ -88,6 +90,13 @@ public class CompilerEngine {
                 TablaSimbolos.limpiar();
                 AnalizadorAST.analizar(programa);
                 simbolos = new ArrayList<>(TablaSimbolos.getSimbolos());
+
+                // Ejecución (solo si no hay errores léxicos ni sintácticos previos)
+                if (erroresLexicos.isEmpty() && erroresSintacticos.isEmpty()) {
+                    InterpreteAST interprete = new InterpreteAST();
+                    interprete.ejecutar(programa);
+                    salidaEjecucion = interprete.getSalida();
+                }
             }
         } catch (Exception e) {
             String mensajesErr = errBuffer.toString();
@@ -187,6 +196,7 @@ public class CompilerEngine {
         erroresSintacticos.clear();
         astBuffer = new StringBuilder();
         simbolos = new ArrayList<>();
+        salidaEjecucion = "";
     }
 
     // ─── Getters para el servidor HTTP ───────────────────────────────────────
@@ -209,5 +219,9 @@ public class CompilerEngine {
 
     public List<SimboloEntry> getSimbolos() {
         return simbolos;
+    }
+
+    public String getSalida() {
+        return salidaEjecucion;
     }
 }
