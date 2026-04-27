@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import './OutputPanel.css';
 
 const TABS = [
-  { id: 'salida',      label: 'Salida / Consola',   icon: '💻' },
-  { id: 'ast',         label: 'Árbol Sintáctico',   icon: '🌿' },
-  { id: 'lexicos',     label: 'Errores Léxicos',    icon: '⚠' },
+  { id: 'salida', label: 'Salida / Consola', icon: '' },
+  { id: 'ast', label: 'Árbol Sintáctico', icon: '🌿' },
+  { id: 'lexicos', label: 'Errores Léxicos', icon: '⚠' },
   { id: 'sintacticos', label: 'Errores Sintácticos', icon: '✗' },
-  { id: 'simbolos',   label: 'Tabla de Símbolos',  icon: '📜' },
+  { id: 'simbolos', label: 'Tabla de Símbolos', icon: '📜' },
 ];
 
 export default function OutputPanel({ result }) {
@@ -21,8 +21,8 @@ export default function OutputPanel({ result }) {
       <div className="tab-bar">
         {TABS.map((tab) => {
           const count =
-            tab.id === 'lexicos'     ? lexCount :
-            tab.id === 'sintacticos' ? synCount  : null;
+            tab.id === 'lexicos' ? lexCount :
+              tab.id === 'sintacticos' ? synCount : null;
           return (
             <button
               key={tab.id}
@@ -49,11 +49,11 @@ export default function OutputPanel({ result }) {
           </div>
         ) : (
           <>
-            {activeTab === 'salida'      && <ConsoleView salida={result.salida} />}
-            {activeTab === 'ast'         && <ASTView ast={result.ast} />}
-            {activeTab === 'lexicos'     && <ErrorTable errors={result.erroresLexicos} type="Léxico" />}
+            {activeTab === 'salida' && <ConsoleView salida={result.salida} />}
+            {activeTab === 'ast' && <ASTView ast={result.ast} />}
+            {activeTab === 'lexicos' && <ErrorTable errors={result.erroresLexicos} type="Léxico" />}
             {activeTab === 'sintacticos' && <ErrorTable errors={result.erroresSintacticos} type="Sintáctico" />}
-            {activeTab === 'simbolos'    && <SymbolTable simbolos={result.tablaSimbolos} />}
+            {activeTab === 'simbolos' && <SymbolTable simbolos={result.tablaSimbolos} />}
           </>
         )}
       </div>
