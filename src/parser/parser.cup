@@ -1,3 +1,5 @@
+package parser;
+
 import java_cup.runtime.*;
 import compilador.ast.*;
 import java.util.*;
