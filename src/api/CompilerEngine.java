@@ -72,15 +72,23 @@ public class CompilerEngine {
     private void parseCode(String rutaArchivo) throws IOException {
         Lexer.limpiarErrores();
 
-        java.io.ByteArrayOutputStream errBuffer = new java.io.ByteArrayOutputStream();
-        java.io.PrintStream errOriginal = System.err;
-        System.setErr(new java.io.PrintStream(errBuffer));
-
         try {
             Parser parser = new Parser(new Lexer(new FileReader(rutaArchivo)));
-            Object result = parser.parse().value;
+            Object result = null;
+            
+            try {
+                result = parser.parse().value;
+            } catch (Exception e) {
+                // Ignoramos la excepción aquí para poder capturar la lista de erroresSintacticos
+            }
 
-            if (result instanceof Programa) {
+            // Obtenemos los errores exactos del parser
+            if (parser.erroresSintacticos != null && !parser.erroresSintacticos.isEmpty()) {
+                erroresSintacticos.addAll(parser.erroresSintacticos);
+            }
+
+            // Solo avanzamos si se pudo parsear y no hubo errores
+            if (result instanceof Programa && erroresSintacticos.isEmpty()) {
                 Programa programa = (Programa) result;
 
                 // Árbol sintáctico
@@ -92,33 +100,14 @@ public class CompilerEngine {
                 simbolos = new ArrayList<>(TablaSimbolos.getSimbolos());
 
                 // Ejecución (solo si no hay errores léxicos ni sintácticos previos)
-                if (erroresLexicos.isEmpty() && erroresSintacticos.isEmpty()) {
+                if (erroresLexicos.isEmpty()) {
                     InterpreteAST interprete = new InterpreteAST();
                     interprete.ejecutar(programa);
                     salidaEjecucion = interprete.getSalida();
                 }
             }
         } catch (Exception e) {
-            String mensajesErr = errBuffer.toString();
-            String[] lineas = mensajesErr.split("\n");
-            for (String linea : lineas) {
-                linea = linea.trim();
-                if (linea.isEmpty()) continue;
-                int columna = 0;
-                if (linea.contains("character")) {
-                    try {
-                        String[] partes = linea.split("character ");
-                        if (partes.length > 1) {
-                            columna = Integer.parseInt(partes[1].split(" ")[0].trim());
-                        }
-                    } catch (Exception ignored) {}
-                }
-                if (linea.contains("Syntax error") || linea.contains("expected")) {
-                    erroresSintacticos.add(new ErrorSintactico("Error sintáctico: " + linea, 0, columna));
-                }
-            }
-        } finally {
-            System.setErr(errOriginal);
+            erroresSintacticos.add(new ErrorSintactico("Error de lectura: " + e.getMessage(), 0, 0));
         }
     }
 

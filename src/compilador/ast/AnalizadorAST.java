@@ -14,12 +14,12 @@ public class AnalizadorAST {
 
         } else if (node instanceof Declaracion) {
             Declaracion d = (Declaracion) node;
-            TablaSimbolos.declarar(d.identificador, d.tipo, null, 0, 0);
+            TablaSimbolos.declarar(d.identificador, d.tipo, null, d.linea, d.columna);
 
         } else if (node instanceof DeclaracionAsignacion) {
             DeclaracionAsignacion da = (DeclaracionAsignacion) node;
             String valor = resolverValor(da.expresion);
-            TablaSimbolos.declarar(da.identificador, da.tipo, valor, 0, 0);
+            TablaSimbolos.declarar(da.identificador, da.tipo, valor, da.linea, da.columna);
 
         } else if (node instanceof Asignacion) {
             Asignacion a = (Asignacion) node;

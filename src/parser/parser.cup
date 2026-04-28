@@ -4,6 +4,19 @@ import java.util.*;
 
 /* CODIGO DEL PARSER - manejo de errores */
 parser code {:
+    public List<ErrorSintactico> erroresSintacticos = new ArrayList<>();
+
+    @Override
+    public void syntax_error(Symbol cur_token) {
+        String tokenStr = (cur_token.value != null) ? cur_token.value.toString() : sym.terminalNames[cur_token.sym];
+        String msg = "Token inesperado: '" + tokenStr + "'";
+        erroresSintacticos.add(new ErrorSintactico(msg, cur_token.left, cur_token.right));
+    }
+
+    @Override
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        // Ignorar para recolectar todos los posibles
+    }
 :};
 
 /* TERMINALES - palabras reservadas */
@@ -86,22 +99,22 @@ instruccion ::= declaracion:d    {: RESULT = d; :}
     | retornar:r                 {: RESULT = r; :};
 
 /* DECLARACIONES */
-declaracion ::= GEO IDENTIFICADOR:id PUNTO_COMA
-    {: RESULT = new Declaracion("geo", id); :}
-    | GEO IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
-    {: RESULT = new DeclaracionAsignacion("geo", id, e); :}
-    | TEXTO IDENTIFICADOR:id PUNTO_COMA
-    {: RESULT = new Declaracion("texto", id); :}
-    | TEXTO IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
-    {: RESULT = new DeclaracionAsignacion("texto", id, e); :}
-    | ESENCIA IDENTIFICADOR:id PUNTO_COMA
-    {: RESULT = new Declaracion("esencia", id); :}
-    | ESENCIA IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
-    {: RESULT = new DeclaracionAsignacion("esencia", id, e); :};
+declaracion ::= GEO:g IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("geo", id, gleft, gright); :}
+    | GEO:g IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("geo", id, e, gleft, gright); :}
+    | TEXTO:t IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("texto", id, tleft, tright); :}
+    | TEXTO:t IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("texto", id, e, tleft, tright); :}
+    | ESENCIA:es IDENTIFICADOR:id PUNTO_COMA
+    {: RESULT = new Declaracion("esencia", id, esleft, esright); :}
+    | ESENCIA:es IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
+    {: RESULT = new DeclaracionAsignacion("esencia", id, e, esleft, esright); :};
 
 /* ASIGNACION */
 asignacion ::= IDENTIFICADOR:id ASIGNACION expresion:e PUNTO_COMA
-    {: RESULT = new Asignacion(id, e); :};
+    {: RESULT = new Asignacion(id, e, idleft, idright); :};
 
 /* PRINT */
 imprimir ::= INVOCAR PARENTESIS_ABRE expresion:e PARENTESIS_CIERRA PUNTO_COMA
